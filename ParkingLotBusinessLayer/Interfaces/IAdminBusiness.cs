@@ -8,7 +8,7 @@ namespace ParkingLotBusinessLayer.Interfaces
 {
     public interface IAdminBusiness
     {
-        List<RegistrationResponse> ListOfUsers(int adminID);
+        List<RegistrationResponse> ListOfSecurity(int adminID);
 
         RegistrationResponse Registration(AdminRegistrationRequest adminDetails);
 

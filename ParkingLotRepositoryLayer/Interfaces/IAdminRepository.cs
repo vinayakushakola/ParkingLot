@@ -8,7 +8,7 @@ namespace ParkingLotRepositoryLayer.Interfaces
 {
     public interface IAdminRepository
     {
-        List<RegistrationResponse> ListOfUsers(int adminID);
+        List<RegistrationResponse> ListOfSecurity(int adminID);
 
         RegistrationResponse Registration(AdminRegistrationRequest adminDetails);
 

@@ -17,12 +17,12 @@ namespace ParkingLotBusinessLayer.Services
             _adminRepository = adminRepository;
         }
 
-        public List<RegistrationResponse> ListOfUsers(int adminID)
+        public List<RegistrationResponse> ListOfSecurity(int adminID)
         {
             if (adminID <= 0)
                 return null;
             else
-                return _adminRepository.ListOfUsers(adminID);
+                return _adminRepository.ListOfSecurity(adminID);
         }
 
         public RegistrationResponse Registration(AdminRegistrationRequest adminDetails)

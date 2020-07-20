@@ -15,13 +15,13 @@ namespace ParkingLotRepositoryLayer.Services
     {
         private readonly AppDBContext _appDBContext;
         private static readonly string _admin = "Admin";
-        private static readonly string _user = "User";
+        private static readonly string _user = "Security";
 
         public AdminRepository(AppDBContext appDBContext)
         {
             _appDBContext = appDBContext;
         }
-        public List<RegistrationResponse> ListOfUsers(int adminID)
+        public List<RegistrationResponse> ListOfSecurity(int adminID)
         {
             try
             {

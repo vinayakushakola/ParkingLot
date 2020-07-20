@@ -4,6 +4,12 @@
         <name>ParkingLot</name>
     </assembly>
     <members>
+        <member name="M:ParkingLot.Controllers.AdminController.ListOfSecurity">
+            <summary>
+            Shows List of Securities Details
+            </summary>
+            <returns>If Data Found return Ok else Not Found or Bad Request</returns>
+        </member>
         <member name="M:ParkingLot.Controllers.AdminController.Registration(ParkingLotCommonLayer.RequestModels.AdminRegistrationRequest)">
             <summary>
             Registration

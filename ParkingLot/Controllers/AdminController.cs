@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,46 @@ namespace ParkingLot.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Shows List of Securities Details
+        /// </summary>
+        /// <returns>If Data Found return Ok else Not Found or Bad Request</returns>
+        [HttpGet]
+        [Route("Security")]
+        [Authorize]
+        public IActionResult ListOfSecurity()
+        {
+            try
+            {
+                var user = HttpContext.User;
+                if ((user.HasClaim(u => u.Type == "TokenType")) && (user.HasClaim(u => u.Type == "UserRole")))
+                {
+                    if ((user.Claims.FirstOrDefault(u => u.Type == "TokenType").Value == "Login") &&
+                            (user.Claims.FirstOrDefault(u => u.Type == "UserRole").Value == "Admin"))
+                    {
+                        int ID = Convert.ToInt32(user.Claims.FirstOrDefault(u => u.Type == "AdminID").Value);
+                        var data = _adminBusiness.ListOfSecurity(ID);
+                        if (data != null)
+                        {
+                            success = true;
+                            message = "List of Securities Data Fetched Successfully";
+                            return Ok(new { success, message, data });
+                        }
+                        else
+                        {
+                            message = "No Security Data Found";
+                            return NotFound(new { success, message });
+                        }
+                    }
+                }
+                message = "Invalid Token!";
+                return BadRequest(new { success, message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
         /// <summary>
         /// Registration
         /// </summary>
@@ -110,7 +151,7 @@ namespace ParkingLot.Controllers
 
                 var claims = new[]
                 {
-                    new Claim("UserID", adminDetails.ID.ToString()),
+                    new Claim("AdminID", adminDetails.ID.ToString()),
                     new Claim("Email", adminDetails.Email.ToString()),
                     new Claim("TokenType", tokenType),
                     new Claim("UserRole", adminDetails.UserRole.ToString())
