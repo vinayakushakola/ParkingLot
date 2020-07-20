@@ -14,5 +14,7 @@ namespace ParkingLotRepositoryLayer.ApplicationContext
         }
 
         public DbSet<Users> Users { set; get; }
+        public DbSet<ParkingDetails> ParkingDetails { set; get; }
+        public DbSet<UnParkedDetails> UnParkedDetails { set; get; }
     }
 }

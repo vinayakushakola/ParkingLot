@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ParkingLotCommonLayer\ParkingLotCommonLayer.csproj" />
+    <ProjectReference Include="..\ParkingLotRepositoryLayer\ParkingLotRepositoryLayer.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ParkingLot</name>
+    </assembly>
+    <members>
+        <member name="M:ParkingLot.Controllers.AdminController.Registration(ParkingLotCommonLayer.RequestModels.AdminRegistrationRequest)">
+            <summary>
+            Registration
+            </summary>
+            <param name="adminDetails">Admin Detials</param>
+            <returns>If registration is Successfull return Ok 200</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.AdminController.Login(ParkingLotCommonLayer.RequestModels.LoginRequest)">
+            <summary>
+            Login
+            </summary>
+            <param name="login">Login Details</param>
+            <returns>If Login is Successfull or else 404</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.AdminController.GenerateToken(ParkingLotCommonLayer.ResponseModels.RegistrationResponse,System.String)">
+            <summary>
+            It Generate the token.
+            </summary>
+            <param name="adminDetails">Response Model</param>
+            <param name="tokenType">Token Type</param>
+            <returns>It return Token</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.PoliceController.Registration(ParkingLotCommonLayer.RequestModels.UserRegistrationRequest)">
+            <summary>
+            Registration
+            </summary>
+            <param name="userDetails">User Detials</param>
+            <returns>If registration is Successfull return Ok 200</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.PoliceController.Login(ParkingLotCommonLayer.RequestModels.LoginRequest)">
+            <summary>
+            Login
+            </summary>
+            <param name="login">Login Details</param>
+            <returns>If Login is Successfull or else 404</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.PoliceController.GenerateToken(ParkingLotCommonLayer.ResponseModels.RegistrationResponse,System.String)">
+            <summary>
+            It Generate the token.
+            </summary>
+            <param name="userDetails">Response Model</param>
+            <param name="tokenType">Token Type</param>
+            <returns>It return Token</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.PoliceController.ValidateRegistrationRequest(ParkingLotCommonLayer.RequestModels.UserRegistrationRequest)">
+            <summary>
+            It Validate the RegisterRequest Model Data Before passing on to Business Layer
+            </summary>
+            <param name="userDetails">New User Data</param>
+            <returns>Return true if validation successfull or else false</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.PoliceController.ValidateLoginRequest(ParkingLotCommonLayer.RequestModels.LoginRequest)">
+            <summary>
+            It Validate The LoginRequest Model Data Before Passing it to Business Layer.
+            </summary>
+            <param name="loginRequest">Login Data</param>
+            <returns>Return True If validation is successfull or else false</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.SecurityController.Registration(ParkingLotCommonLayer.RequestModels.UserRegistrationRequest)">
+            <summary>
+            Registration
+            </summary>
+            <param name="userDetails">User Detials</param>
+            <returns>If registration is Successfull return Ok 200</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.SecurityController.Login(ParkingLotCommonLayer.RequestModels.LoginRequest)">
+            <summary>
+            Login
+            </summary>
+            <param name="login">Login Details</param>
+            <returns>If Login is Successfull or else 404</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.SecurityController.GenerateToken(ParkingLotCommonLayer.ResponseModels.RegistrationResponse,System.String)">
+            <summary>
+            It Generate the token.
+            </summary>
+            <param name="userDetails">Response Model</param>
+            <param name="tokenType">Token Type</param>
+            <returns>It return Token</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.SecurityController.ValidateRegistrationRequest(ParkingLotCommonLayer.RequestModels.UserRegistrationRequest)">
+            <summary>
+            It Validate the RegisterRequest Model Data Before passing on to Business Layer
+            </summary>
+            <param name="userDetails">New User Data</param>
+            <returns>Return true if validation successfull or else false</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.SecurityController.ValidateLoginRequest(ParkingLotCommonLayer.RequestModels.LoginRequest)">
+            <summary>
+            It Validate The LoginRequest Model Data Before Passing it to Business Layer.
+            </summary>
+            <param name="loginRequest">Login Data</param>
+            <returns>Return True If validation is successfull or else false</returns>
+        </member>
+    </members>
+</doc>

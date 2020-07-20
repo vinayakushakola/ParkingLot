@@ -10,8 +10,8 @@ using ParkingLotRepositoryLayer.ApplicationContext;
 namespace ParkingLotRepositoryLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20200714135552_UsersMigration")]
-    partial class UsersMigration
+    [Migration("20200720104341_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,59 @@ namespace ParkingLotRepositoryLayer.Migrations
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ParkingLotCommonLayer.ModelDB.ParkingDetails", b =>
+                {
+                    b.Property<int>("ReceiptNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AttendantName")
+                        .IsRequired();
+
+                    b.Property<string>("Color")
+                        .IsRequired();
+
+                    b.Property<bool>("Disability");
+
+                    b.Property<bool>("IsParked");
+
+                    b.Property<string>("OwnerName")
+                        .IsRequired();
+
+                    b.Property<DateTime>("ParkingDate");
+
+                    b.Property<string>("ParkingSlot");
+
+                    b.Property<string>("VehicleBrand")
+                        .IsRequired();
+
+                    b.Property<string>("VehicleNumber")
+                        .IsRequired();
+
+                    b.HasKey("ReceiptNumber");
+
+                    b.ToTable("ParkingDetails");
+                });
+
+            modelBuilder.Entity("ParkingLotCommonLayer.ModelDB.UnParkedDetails", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ReceiptNumber");
+
+                    b.Property<double>("TotalAmt");
+
+                    b.Property<double>("TotalTime");
+
+                    b.Property<DateTime>("UnParkedDate");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UnParkedDetails");
+                });
 
             modelBuilder.Entity("ParkingLotCommonLayer.ModelDB.Users", b =>
                 {

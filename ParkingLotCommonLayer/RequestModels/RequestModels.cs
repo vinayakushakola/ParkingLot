@@ -43,6 +43,4 @@ namespace ParkingLotCommonLayer.RequestModels
         [Required]
         public string Password { set; get; }
     }
-
-
 }
