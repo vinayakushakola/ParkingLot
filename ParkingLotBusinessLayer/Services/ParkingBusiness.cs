@@ -24,6 +24,31 @@ namespace ParkingLotBusinessLayer.Services
             return responseData;
         }
 
+        public ParkResponse GetParkedCarDetailsbyReceiptNo(int receiptNo)
+        {
+            if (receiptNo <= 0)
+            {
+                return null;
+            }
+            else
+            {
+                var responseData = _parkingRepository.GetParkedCarDetailsbyReceiptNo(receiptNo);
+                return responseData;
+            }
+        }
+
+        public ParkResponse GetParkedCarDetailsbyVehicleNo(string vehicleNo)
+        {
+            if (vehicleNo == null)
+            {
+                return null;
+            }
+            else
+            {
+                var responseData = _parkingRepository.GetParkedCarDetailsbyVehicleNo(vehicleNo);
+                return responseData;
+            }
+        }
         public List<ParkResponse> ListOfParkedVehicle(int id)
         {
             if (id <= 0)

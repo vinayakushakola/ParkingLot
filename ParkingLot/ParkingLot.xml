@@ -26,6 +26,46 @@
             <param name="tokenType">Token Type</param>
             <returns>It return Token</returns>
         </member>
+        <member name="M:ParkingLot.Controllers.ParkingController.AvailableParkingSlots">
+            <summary>
+            Shows Available Parking Slots
+            </summary>
+            <returns>If Data Found return Ok else Bad Request</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.ParkingController.GetParkedCarDetailsBy(System.Int32,System.String)">
+            <summary>
+            Shows Parked Car Details by Receipt No or Vehicle No
+            </summary>
+            <param name="receiptNo">Receipt No</param>
+            <param name="vehicleNo">Vehicle No</param>
+            <returns>If data Found return Ok else Not Found or Bad request</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.ParkingController.GetListOfParkedCars">
+            <summary>
+            Shows List of Parked Cars
+            </summary>
+            <returns>If Data Found return Ok else Bad Request</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.ParkingController.GetListOfUnParkedCars">
+            <summary>
+            Shows List of UnParked Cars
+            </summary>
+            <returns>If Data Found return Ok else Bad Request</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.ParkingController.ParkVehicle(ParkingLotCommonLayer.RequestModels.ParkRequest)">
+            <summary>
+            Used for Parking Car
+            </summary>
+            <param name="parkDetails">Parking Details</param>
+            <returns>If Data Found return Ok else UnAuthorized or Bad Request</returns>
+        </member>
+        <member name="M:ParkingLot.Controllers.ParkingController.UnParkVehicle(System.Int32)">
+            <summary>
+            Used for UnParking a car
+            </summary>
+            <param name="receiptNo">Receipt No</param>
+            <returns>If Data Found return Ok else Not Found or Bad Request</returns>
+        </member>
         <member name="M:ParkingLot.Controllers.PoliceController.Registration(ParkingLotCommonLayer.RequestModels.UserRegistrationRequest)">
             <summary>
             Registration

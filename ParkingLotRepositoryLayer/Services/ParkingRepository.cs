@@ -7,6 +7,7 @@ using ParkingLotRepositoryLayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Resources;
 using System.Text;
 
@@ -49,6 +50,47 @@ namespace ParkingLotRepositoryLayer.Services
             }
         }
 
+        public ParkResponse GetParkedCarDetailsbyReceiptNo(int receiptNo)
+        {
+            try
+            {
+                ParkResponse responseData = null;
+                var vehicleExists = _appDBContext.ParkingDetails.Any(v => v.ReceiptNumber == receiptNo && v.IsParked == true);
+                if (vehicleExists)
+                {
+                    var vehicleData = _appDBContext.ParkingDetails.Find(receiptNo);
+                    if (vehicleData != null)
+                        responseData = ParkedVehicleResponse(vehicleData);
+                }
+                return responseData;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public ParkResponse GetParkedCarDetailsbyVehicleNo(string vehicleNo)
+        {
+            try
+            {
+                ParkResponse responseData = null;
+                var vehicleExists = _appDBContext.ParkingDetails.Any(v => v.VehicleNumber == vehicleNo && v.IsParked == true);
+                if (vehicleExists)
+                {
+                    var vehicleData = _appDBContext.ParkingDetails.
+                        Where(vehicle => vehicle.VehicleNumber == vehicleNo && vehicle.IsParked == true).FirstOrDefault();
+                    if (vehicleData != null)
+                        responseData = ParkedVehicleResponse(vehicleData);
+                }
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public ParkResponse ParkVehicle(int securityID, ParkRequest parkDetails)
         {
             try
@@ -79,18 +121,7 @@ namespace ParkingLotRepositoryLayer.Services
                     parkData.ParkingSlot = parkingSlot;
                     _appDBContext.ParkingDetails.Add(parkData);
                     _appDBContext.SaveChanges();
-                    ParkResponse responseData = new ParkResponse
-                    {
-                        ReceiptNumber = parkData.ReceiptNumber,
-                        OwnerName = parkData.OwnerName,
-                        VehicleNumber = parkData.VehicleNumber,
-                        VehicleBrand = parkData.VehicleBrand,
-                        Color = parkData.Color,
-                        Disability = parkData.Disability,
-                        AttendantName = parkData.AttendantName,
-                        ParkingDate = parkData.ParkingDate,
-                        ParkingSlot = parkData.ParkingSlot
-                    };
+                    ParkResponse responseData = ParkedVehicleResponse(parkData);
                     return responseData;
                 }
                 return null;
@@ -100,7 +131,6 @@ namespace ParkingLotRepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
 
         public UnParkResponse UnParkVehicle(int securityID, int receiptNo)
         {
@@ -130,22 +160,7 @@ namespace ParkingLotRepositoryLayer.Services
                     unParkData.IsParked = false;
                     _appDBContext.SaveChanges();
 
-                    UnParkResponse responseData = new UnParkResponse
-                    {
-                        ReceiptNumber = unParkData.ReceiptNumber,
-                        OwnerName = unParkData.OwnerName,
-                        VehicleNumber = unParkData.VehicleNumber,
-                        VehicleBrand = unParkData.VehicleBrand,
-                        Color = unParkData.Color,
-                        IsParked = unParkData.IsParked,
-                        Disability = unParkData.Disability,
-                        AttendantName = unParkData.AttendantName,
-                        ParkingDate = unParkData.ParkingDate,
-                        UnParkedDate = unParkedData.UnParkedDate,
-                        ParkingSlot = unParkData.ParkingSlot,
-                        TotalTime = unParkedData.TotalTime,
-                        TotalAmt = unParkedData.TotalAmt
-                    };
+                    UnParkResponse responseData = UnParkedVehicleResponse(unParkData, unParkedData);
                     return responseData;
                 }
                 return null;
@@ -167,18 +182,7 @@ namespace ParkingLotRepositoryLayer.Services
                 {
                     responseData = _appDBContext.ParkingDetails.
                         Where(vehicle => vehicle.ReceiptNumber > 0 && vehicle.IsParked == true).
-                        Select(vehicle => new ParkResponse
-                        {
-                            ReceiptNumber = vehicle.ReceiptNumber,
-                            OwnerName = vehicle.OwnerName,
-                            VehicleNumber = vehicle.VehicleNumber,
-                            VehicleBrand = vehicle.VehicleBrand,
-                            Color = vehicle.Color,
-                            Disability = vehicle.Disability,
-                            AttendantName = vehicle.AttendantName,
-                            ParkingDate = vehicle.ParkingDate,
-                            ParkingSlot = vehicle.ParkingSlot
-                        }).ToList();
+                        Select(vehicle => ParkedVehicleResponse(vehicle)).ToList();
                 }
                 if (responseData != null)
                     return responseData;
@@ -204,22 +208,7 @@ namespace ParkingLotRepositoryLayer.Services
                         Join(_appDBContext.UnParkedDetails,
                         park => park.ReceiptNumber,
                         unPark => unPark.ReceiptNumber,
-                        (park, unPark) => new UnParkResponse
-                        {
-                            ReceiptNumber = park.ReceiptNumber,
-                            OwnerName = park.OwnerName,
-                            VehicleNumber = park.VehicleNumber,
-                            VehicleBrand = park.VehicleBrand,
-                            Color = park.Color,
-                            IsParked = park.IsParked,
-                            Disability = park.Disability,
-                            AttendantName = park.AttendantName,
-                            ParkingDate = park.ParkingDate,
-                            UnParkedDate = unPark.UnParkedDate,
-                            ParkingSlot = park.ParkingSlot,
-                            TotalTime = unPark.TotalTime,
-                            TotalAmt = unPark.TotalAmt
-                        }).ToList();
+                        (park, unPark) => UnParkedVehicleResponse(park, unPark)).ToList();
                 }
                 if (unParkedVehicleData != null)
                     return unParkedVehicleData;
@@ -275,6 +264,62 @@ namespace ParkingLotRepositoryLayer.Services
                 return "A";
             }
             return null;
+        }
+
+        private ParkResponse ParkedVehicleResponse(ParkingDetails parkingDetails)
+        {
+            try
+            {
+                ParkResponse responseData = new ParkResponse
+                {
+                    ReceiptNumber = parkingDetails.ReceiptNumber,
+                    OwnerName = parkingDetails.OwnerName,
+                    VehicleNumber = parkingDetails.VehicleNumber,
+                    VehicleBrand = parkingDetails.VehicleBrand,
+                    Color = parkingDetails.Color,
+                    Disability = parkingDetails.Disability,
+                    AttendantName = parkingDetails.AttendantName,
+                    ParkingDate = parkingDetails.ParkingDate,
+                    ParkingSlot = parkingDetails.ParkingSlot
+                };
+                if (responseData != null)
+                    return responseData;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private UnParkResponse UnParkedVehicleResponse(ParkingDetails unParkData, UnParkedDetails unParkedData)
+        {
+            try
+            {
+                UnParkResponse responseData = new UnParkResponse
+                {
+                    ReceiptNumber = unParkData.ReceiptNumber,
+                    OwnerName = unParkData.OwnerName,
+                    VehicleNumber = unParkData.VehicleNumber,
+                    VehicleBrand = unParkData.VehicleBrand,
+                    Color = unParkData.Color,
+                    IsParked = unParkData.IsParked,
+                    Disability = unParkData.Disability,
+                    AttendantName = unParkData.AttendantName,
+                    ParkingDate = unParkData.ParkingDate,
+                    UnParkedDate = unParkedData.UnParkedDate,
+                    ParkingSlot = unParkData.ParkingSlot,
+                    TotalTime = unParkedData.TotalTime,
+                    TotalAmt = unParkedData.TotalAmt
+                };
+                if (responseData != null)
+                    return responseData;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

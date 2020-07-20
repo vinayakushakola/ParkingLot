@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using ParkingLotBusinessLayer.Interfaces;
 using ParkingLotCommonLayer.ModelDB;
 using ParkingLotCommonLayer.RequestModels;
+using ParkingLotCommonLayer.ResponseModels;
 
 namespace ParkingLot.Controllers
 {
@@ -25,7 +27,12 @@ namespace ParkingLot.Controllers
             _parkingBusiness = parkingBusiness;
         }
 
+        /// <summary>
+        /// Shows Available Parking Slots
+        /// </summary>
+        /// <returns>If Data Found return Ok else Bad Request</returns>
         [HttpGet]
+        [Route("ParkingSlots")]
         public IActionResult AvailableParkingSlots()
         {
             try
@@ -49,6 +56,49 @@ namespace ParkingLot.Controllers
             }
         }
 
+        /// <summary>
+        /// Shows Parked Car Details by Receipt No or Vehicle No
+        /// </summary>
+        /// <param name="receiptNo">Receipt No</param>
+        /// <param name="vehicleNo">Vehicle No</param>
+        /// <returns>If data Found return Ok else Not Found or Bad request</returns>
+        [HttpGet]
+        [Route("ParkedCar")]
+        public IActionResult GetParkedCarDetailsBy(int receiptNo, string vehicleNo)
+        {
+            try
+            {
+                ParkResponse data = null;
+                if (receiptNo != 0)
+                {
+                    data = _parkingBusiness.GetParkedCarDetailsbyReceiptNo(receiptNo);
+                }
+                else
+                {
+                    data = _parkingBusiness.GetParkedCarDetailsbyVehicleNo(vehicleNo);
+                }
+                if (data != null)
+                {
+                    success = true;
+                    message = "Parked Car Details Fetched Successfully";
+                    return Ok(new { success, message, data });
+                }
+                else
+                {
+                    message = "No Car is Parked";
+                    return NotFound(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Shows List of Parked Cars
+        /// </summary>
+        /// <returns>If Data Found return Ok else Bad Request</returns>
         [HttpGet]
         [Route("ParkedCars")]
         [Authorize]
@@ -87,6 +137,10 @@ namespace ParkingLot.Controllers
             }
         }
 
+        /// <summary>
+        /// Shows List of UnParked Cars
+        /// </summary>
+        /// <returns>If Data Found return Ok else Bad Request</returns>
         [HttpGet]
         [Route("UnParkedCars")]
         public IActionResult GetListOfUnParkedCars()
@@ -124,6 +178,11 @@ namespace ParkingLot.Controllers
             }
         }
 
+        /// <summary>
+        /// Used for Parking Car
+        /// </summary>
+        /// <param name="parkDetails">Parking Details</param>
+        /// <returns>If Data Found return Ok else UnAuthorized or Bad Request</returns>
         [HttpPost]
         [Route("Park")]
         [Authorize]
@@ -161,6 +220,11 @@ namespace ParkingLot.Controllers
             }
         }
 
+        /// <summary>
+        /// Used for UnParking a car
+        /// </summary>
+        /// <param name="receiptNo">Receipt No</param>
+        /// <returns>If Data Found return Ok else Not Found or Bad Request</returns>
         [HttpPost]
         [Route("{receiptNo}/UnPark")]
         [Authorize]
@@ -185,7 +249,7 @@ namespace ParkingLot.Controllers
                         else
                         {
                             message = "Car Not exists";
-                            return Ok(new { success, message });
+                            return NotFound(new { success, message });
                         }
                     }
                 }

@@ -11,6 +11,10 @@ namespace ParkingLotBusinessLayer.Interfaces
     {
         ParkingSlotResponse AvailableParkingSlots();
 
+        ParkResponse GetParkedCarDetailsbyReceiptNo(int receiptNo);
+
+        ParkResponse GetParkedCarDetailsbyVehicleNo(string vehicleNo);
+
         List<ParkResponse> ListOfParkedVehicle(int id);
 
         List<UnParkResponse> ListOfUnParkedVehicle(int id);
